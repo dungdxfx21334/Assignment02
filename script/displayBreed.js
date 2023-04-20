@@ -36,6 +36,9 @@ const onChangeType = function () {
 };
 
 const renderBreed = function (breedArr, filtered = "true") {
+  // if the filtered value is false. All the breeds are displayed
+  // if the filtered value is cat, only cat breeds will be displayed, same for dog
+  // if the filtered value is "true" which is default value. The type will be retrieve from the form.
   let filteredAnimal = "";
   switch (filtered) {
     case "cat":

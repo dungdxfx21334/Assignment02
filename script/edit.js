@@ -164,15 +164,46 @@ btnSubmit.addEventListener("click", function () {
     }
     return true;
   };
+
+  // Get new information from user.
   const newData = getFormElements();
+
   if (validateData(newData)) {
     const selectedPetIndex = petArr.findIndex(function (pet) {
       return pet.id === newData.inputId.value;
     });
-    // petArr.splice(selectedPetIndex, 1);
-    // petArr.push(newData);
-    // saveToStorage("petArr", JSON.stringify(petArr));
-    // renderTableData(petArr);
+    // I can't use splice to delete the old pet at selectedPetIndex and then add the newData because the newData has a different format so I have to do this manually like this.
+    petArr[selectedPetIndex].dataName = newData.inputName.value;
+    petArr[selectedPetIndex].age = newData.inputAge.value;
+    petArr[selectedPetIndex].type = newData.inputType.value;
+    petArr[selectedPetIndex].weight = newData.inputWeight.value;
+    petArr[selectedPetIndex].length = newData.inputLength.value;
+    petArr[selectedPetIndex].color = newData.inputColor1.value;
+    petArr[selectedPetIndex].breed = newData.inputBreed.value;
+    petArr[selectedPetIndex].vaccinated = newData.inputVac.checked;
+    petArr[selectedPetIndex].dewormed = newData.inputDewormed.checked;
+    petArr[selectedPetIndex].sterilized = newData.inputSterilized.checked;
+    petArr[selectedPetIndex].date = new Date();
+    petArr[selectedPetIndex].bmi = "?";
   }
+
+  saveToStorage("petArr", JSON.stringify(petArr));
+  renderTableData(petArr);
+  // Clear input;
+  newData.inputId.value = "";
+  newData.inputName.value = "";
+  newData.inputAge.value = "";
+  newData.inputType.value = "";
+  newData.inputWeight.value = "";
+  newData.inputLength.value = "";
+  newData.inputColor1.value = "";
+  newData.inputBreed.value = "";
+  newData.inputVac.checked = "";
+  newData.inputDewormed.checked = "";
+  newData.inputSterilized.checked = "";
+
+  // Hide form
+  const formContainer = document.getElementById("container-form");
+  formContainer.classList.add("hide");
 });
 /* END Register new informations when users submit */

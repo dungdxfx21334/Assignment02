@@ -1,5 +1,8 @@
 "use strict";
 
+/* This function is needed in the two seperated files so I moved it to a new file
+  and import them to the needed file instead of having the same code in those two files. */
+
 /* Add breed to the main page */
 const breedArr = JSON.parse(getFromStorage("breedArr"));
 

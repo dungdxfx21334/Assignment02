@@ -46,7 +46,6 @@ function renderTableData(petArr) {
 
 const petArr = JSON.parse(getFromStorage("petArr"));
 renderTableData(petArr);
-renderBreed(breedArr);
 
 /* END Display every element in the petArr  */
 
@@ -100,11 +99,20 @@ const editPet = function (petId) {
   oldData.inputWeight.value = Number(petArr[selectedPetIndex].weight);
   oldData.inputLength.value = Number(petArr[selectedPetIndex].length);
   oldData.inputColor1.value = petArr[selectedPetIndex].color;
-  //   inputBreed.value = petArr[selectedPetIndex].breed;
-  const breedValue = document.createElement("option");
-  breedValue.setAttribute("selected", "selected");
-  breedValue.innerHTML = petArr[selectedPetIndex].breed;
-  oldData.inputBreed.appendChild(breedValue);
+  onChangeType();
+  // const breedValue = document.createElement("option");
+  // breedValue.setAttribute("selected", "selected");
+  // breedValue.innerHTML = petArr[selectedPetIndex].breed;
+  // oldData.inputBreed.appendChild(breedValue);
+
+  const breedOptions = [...oldData.inputBreed.children];
+  const selectedBreedIndex = breedOptions.findIndex(function (child) {
+    console.log(child.value, petArr[selectedPetIndex].breed);
+    return child.value === petArr[selectedPetIndex].breed;
+  });
+  breedOptions[selectedBreedIndex].setAttribute("selected", "selected");
+  renderBreed(breedArr);
+
   oldData.inputVac.checked = petArr[selectedPetIndex].vaccinated;
   oldData.inputDewormed.checked = petArr[selectedPetIndex].dewormed;
   oldData.inputSterilized.checked = petArr[selectedPetIndex].sterilized;

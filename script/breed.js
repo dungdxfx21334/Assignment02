@@ -23,7 +23,6 @@ function renderBreedTable(breedArr) {
 
 /*  END Render breed table */
 renderBreedTable(breedArr);
-renderBreed(breedArr);
 
 /* Submit function */
 const btnSubmit = document.getElementById("submit-btn");

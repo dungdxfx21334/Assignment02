@@ -217,6 +217,11 @@ btnSubmit.addEventListener("click", function () {
         return false;
       }
     }
+    // Name
+    if (data.dataName === "") {
+      alert("Please enter name");
+      return false;
+    }
     // Age
 
     if (data.age < 1 || data.age > 15) {
@@ -254,8 +259,8 @@ btnSubmit.addEventListener("click", function () {
   };
 
   // Add pet to the list
-  // const validate = validateData(data);
-  const validate = 1;
+  const validate = validateData(data);
+  // const validate = 1;
   if (validate) {
     petArr.push(data);
     clearInput();
@@ -350,30 +355,3 @@ function calcBMI(petData) {
 
   return Math.round((bmi + Number.EPSILON) * 100) / 100;
 }
-
-/* Add breed to the main page */
-const breedArr = JSON.parse(getFromStorage("breedArr"));
-
-const renderBreed = function (breedArr) {
-  const inputBreed = document.getElementById("input-breed");
-  console.log(inputBreed);
-  breedArr.forEach(function (breed) {
-    const option = document.createElement("option");
-    option.innerHTML = breed.breedName;
-    inputBreed.appendChild(option);
-    console.log(option);
-  });
-};
-
-const inputType = document.getElementById("input-type");
-inputType.onchange = function () {
-  console.log(breedArr);
-  const inputBreed = document.getElementById("input-breed");
-  inputBreed.innerHTML = "<option>Select Breed</option>";
-  const filteredBreedArr = breedArr.filter(function (breed) {
-    return breed.animalType === inputType.value;
-  });
-  renderBreed(filteredBreedArr);
-};
-
-/* END Add breed to the main page */

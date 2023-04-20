@@ -9,8 +9,11 @@ sidebar.addEventListener("click", function () {
 
 // Add new pet to the system
 
-const petArr = []; // All the pet in the list
-const idArr = []; // All the ids of the pets in the list
+console.log(getFromStorage("petArr"));
+const petArr = JSON.parse(getFromStorage("petArr")); // All the pet in the list
+console.log(petArr);
+
+const idArr = JSON.parse(getFromStorage("idArr")); // All the ids of the pets in the list
 let healthyPets = []; // For healthy pets
 const btnSubmit = document.getElementById("submit-btn"); // submit btn
 const btnHealthyPet = document.getElementById("healthy-btn"); // show healthy pet btn
@@ -50,7 +53,7 @@ function renderTableData(petArr) {
                   ? '<i class="bi bi-check-circle-fill"></i>'
                   : '<i class="bi bi-x-circle-fill"></i>'
               }</td>
-							<td>${petArr[i].date.toISOString().split("T")[0]}</td>
+							<td>${new Date(petArr[i].date).toISOString().split("T")[0]}</td>
                             <td class="bmi-id--${petArr[i].id}">${
       petArr[i].bmi
     }</td>
@@ -64,6 +67,9 @@ function renderTableData(petArr) {
     tableBodyEl.appendChild(row);
   }
 }
+
+renderTableData(petArr);
+addDelete();
 
 // Adding delete function to the delete button. Because I don't use the onClick function, I need to add the delete function to every delete buttons
 // every time the table is re-rendered. So making it a function would be eaiser to complete the task.
@@ -84,6 +90,7 @@ function addDelete() {
         for (let i = 0, idArrLen = idArr.length; i < idArrLen; i++) {
           if (idArr[i] === id) {
             idArr.splice(i, 1);
+            saveToStorage("idArr", JSON.stringify(idArr));
             break;
           }
         }
@@ -99,7 +106,8 @@ function addDelete() {
           }
         }
         const tableRows = document.querySelectorAll(".table-row");
-
+        // Update new petArr to the local storage
+        saveToStorage("petArr", JSON.stringify(petArr));
         // console.log(tableRows);
         // Making the content of the row that contains the clicked delete button empty instead of re-rendering the whole table.
         for (let i = 0, tableRowLen = tableRows.length; i < tableRowLen; i++) {
@@ -241,16 +249,18 @@ btnSubmit.addEventListener("click", function () {
       return false;
     }
     idArr.push(data.id);
+    saveToStorage("idArr", JSON.stringify(idArr));
     return true;
   };
 
   // Add pet to the list
-  const validate = validateData(data);
-  //   const validate = 1;
+  // const validate = validateData(data);
+  const validate = 1;
   if (validate) {
     petArr.push(data);
     clearInput();
     renderTableData(petArr);
+    saveToStorage("petArr", JSON.stringify(petArr));
     // Make the show healthy pet button display "Show healthy pet" text every time user add a new pet,
     // a list of every pet should be displayed instead of only healthy pet even though the user was seeing all healthy pet when they submit a new pet.
     btnShowHealthyPetText("Show Healthy Pet");
@@ -340,3 +350,30 @@ function calcBMI(petData) {
 
   return Math.round((bmi + Number.EPSILON) * 100) / 100;
 }
+
+/* Add breed to the main page */
+const breedArr = JSON.parse(getFromStorage("breedArr"));
+
+const renderBreed = function (breedArr) {
+  const inputBreed = document.getElementById("input-breed");
+  console.log(inputBreed);
+  breedArr.forEach(function (breed) {
+    const option = document.createElement("option");
+    option.innerHTML = breed.breedName;
+    inputBreed.appendChild(option);
+    console.log(option);
+  });
+};
+
+const inputType = document.getElementById("input-type");
+inputType.onchange = function () {
+  console.log(breedArr);
+  const inputBreed = document.getElementById("input-breed");
+  inputBreed.innerHTML = "<option>Select Breed</option>";
+  const filteredBreedArr = breedArr.filter(function (breed) {
+    return breed.animalType === inputType.value;
+  });
+  renderBreed(filteredBreedArr);
+};
+
+/* END Add breed to the main page */

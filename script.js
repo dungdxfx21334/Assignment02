@@ -68,6 +68,7 @@ function renderTableData(petArr) {
   }
 }
 
+renderBreed(breedArr);
 renderTableData(petArr);
 addDelete();
 

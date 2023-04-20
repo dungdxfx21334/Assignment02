@@ -46,6 +46,7 @@ function renderTableData(petArr) {
 
 const petArr = JSON.parse(getFromStorage("petArr"));
 renderTableData(petArr);
+renderBreed(breedArr);
 
 /* END Display every element in the petArr  */
 

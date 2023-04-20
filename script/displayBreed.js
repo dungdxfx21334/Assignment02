@@ -1,14 +1,13 @@
 "use strict";
 
-/* This function is needed in the two seperated files so I moved it to a new file
-  and import them to the needed file instead of having the same code in those two files. */
+/* This function is needed in 3 seperated files so I moved it to a new file
+  and import it to the needing files instead of having the same code in those 3 files. */
 
 /* Add breed to the main page */
 const breedArr = JSON.parse(getFromStorage("breedArr"));
 
-const renderBreed = function (breedArr) {
+const displayBreed = function (breedArr) {
   const inputBreed = document.getElementById("input-breed");
-  console.log(inputBreed);
   breedArr.forEach(function (breed) {
     const option = document.createElement("option");
     option.innerHTML = breed.breedName;
@@ -17,15 +16,22 @@ const renderBreed = function (breedArr) {
   });
 };
 
-const inputType = document.getElementById("input-type");
-inputType.onchange = function () {
-  console.log(breedArr);
+const renderBreed = function (breedArr, filtered = true) {
   const inputBreed = document.getElementById("input-breed");
-  inputBreed.innerHTML = "<option>Select Breed</option>";
-  const filteredBreedArr = breedArr.filter(function (breed) {
-    return breed.animalType === inputType.value;
-  });
-  renderBreed(filteredBreedArr);
+  console.log(filtered);
+  if (filtered) {
+    const inputType = document.getElementById("input-type");
+    inputType.onchange = function () {
+      console.log(breedArr);
+      inputBreed.innerHTML = "<option>Select Breed</option>";
+      const filteredBreedArr = breedArr.filter(function (breed) {
+        return breed.animalType === inputType.value;
+      });
+      displayBreed(filteredBreedArr);
+    };
+  } else {
+    displayBreed(breedArr);
+  }
 };
 
 /* END Add breed to the main page */

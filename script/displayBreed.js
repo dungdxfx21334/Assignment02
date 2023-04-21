@@ -7,8 +7,6 @@
 const breedArr = JSON.parse(getFromStorage("breedArr"));
 const inputBreed = document.getElementById("input-breed");
 const inputType = document.getElementById("input-type");
-console.log("This line is printed");
-console.log(inputType.value);
 
 const displayBreed = function (breedArr) {
   const inputBreed = document.getElementById("input-breed");
@@ -16,22 +14,18 @@ const displayBreed = function (breedArr) {
     const option = document.createElement("option");
     option.innerHTML = breed.breedName;
     inputBreed.appendChild(option);
-    console.log(option);
   });
 };
 
 const filterCretiria = function (breed) {
-  console.log(breed.animalType);
   return breed.animalType === inputType.value;
 };
 
 const onChangeType = function () {
-  console.log(breedArr);
   inputBreed.innerHTML = "<option>Select Breed</option>";
   const filteredBreedArr = breedArr.filter(function (breed) {
     return filterCretiria(breed);
   });
-  console.log(filteredBreedArr);
   displayBreed(filteredBreedArr);
 };
 
@@ -51,7 +45,6 @@ const renderBreed = function (breedArr, filtered = "true") {
       filteredAnimal = inputType.value;
       break;
   }
-  console.log(filteredAnimal);
   if (filtered) {
     inputType.onchange = onChangeType;
   } else {

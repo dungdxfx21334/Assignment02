@@ -38,8 +38,7 @@ function renderTableData(petArr) {
               }">Edit</button> 
 
 							</td>`;
-    //   This button should contain only one class with the first 4 letters of "id--" because this class is used to store the id of the pet.
-    // If another class with the first 4 letter of "id--" appear, there is a good chance the program will delete the wrong row because it takes the wrong id.
+
     tableBodyEl.appendChild(row);
   }
 }
@@ -99,12 +98,11 @@ const editPet = function (petId) {
   oldData.inputWeight.value = Number(petArr[selectedPetIndex].weight);
   oldData.inputLength.value = Number(petArr[selectedPetIndex].length);
   oldData.inputColor1.value = petArr[selectedPetIndex].color;
+  /* This onChangeType is originally called when there is a change on the type select field to display
+     corresponding breeds. But it can be applied here when the page is loaded .*/
   onChangeType();
-  // const breedValue = document.createElement("option");
-  // breedValue.setAttribute("selected", "selected");
-  // breedValue.innerHTML = petArr[selectedPetIndex].breed;
-  // oldData.inputBreed.appendChild(breedValue);
 
+  /* Make the old breed of the pet the selected option in the breed select field */
   const breedOptions = [...oldData.inputBreed.children];
   const selectedBreedIndex = breedOptions.findIndex(function (child) {
     console.log(child.value, petArr[selectedPetIndex].breed);
@@ -112,6 +110,7 @@ const editPet = function (petId) {
   });
   breedOptions[selectedBreedIndex].setAttribute("selected", "selected");
   renderBreed(breedArr);
+  /* END Make the old breed of the pet the selected option in the breed select field */
 
   oldData.inputVac.checked = petArr[selectedPetIndex].vaccinated;
   oldData.inputDewormed.checked = petArr[selectedPetIndex].dewormed;
@@ -134,6 +133,7 @@ tbodyEl.addEventListener("click", function (e) {
 /* Register new informations when users submit */
 const btnSubmit = document.getElementById("submit-btn");
 btnSubmit.addEventListener("click", function () {
+  /* Validate information */
   const validateData = function (newData) {
     // Name
     if (newData.inputName.value === "") {
@@ -173,15 +173,16 @@ btnSubmit.addEventListener("click", function () {
     }
     return true;
   };
+  /* END Validate information */
 
-  // Get new information from user.
-  const newData = getFormElements();
+  const newData = getFormElements(); // Get new information from user.
 
   if (validateData(newData)) {
     const selectedPetIndex = petArr.findIndex(function (pet) {
       return pet.id === newData.inputId.value;
     });
-    // I can't use splice to delete the old pet at selectedPetIndex and then add the newData because the newData has a different format so I have to do this manually like this.
+    /*  I can't use splice to delete the old pet at selectedPetIndex and then add the newData 
+    because the newData has a different format. So I have to do this manually like this. */
     petArr[selectedPetIndex].dataName = newData.inputName.value;
     petArr[selectedPetIndex].age = newData.inputAge.value;
     petArr[selectedPetIndex].type = newData.inputType.value;

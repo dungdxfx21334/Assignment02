@@ -6,12 +6,11 @@ const sidebar = document.querySelector("nav");
 sidebar.addEventListener("click", function () {
   sidebar.classList.toggle("active");
 });
+/* END SIDEBAR ANIMATION */
 
 // Add new pet to the system
 
-console.log(getFromStorage("petArr"));
 const petArr = JSON.parse(getFromStorage("petArr")); // All the pet in the list
-console.log(petArr);
 
 const idArr = JSON.parse(getFromStorage("idArr")); // All the ids of the pets in the list
 let healthyPets = []; // For healthy pets
@@ -54,9 +53,7 @@ function renderTableData(petArr) {
                   : '<i class="bi bi-x-circle-fill"></i>'
               }</td>
 							<td>${new Date(petArr[i].date).toISOString().split("T")[0]}</td>
-                            <td class="bmi-id--${petArr[i].id}">${
-      petArr[i].bmi
-    }</td>
+                            
 							<td><button type="button" class="id--${
                 petArr[i].id
               } btn btn-danger btn-delete">Delete</button> 

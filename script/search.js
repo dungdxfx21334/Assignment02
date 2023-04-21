@@ -13,21 +13,32 @@ const getFormElements = function () {
   const petNameSearch = document.getElementById("input-name");
   const petTypeSearch = document.getElementById("input-type");
   const petBreedSearch = document.getElementById("input-breed");
+  const petVacSearch = document.getElementById("input-vaccinated");
+  const petDewormedSearch = document.getElementById("input-dewormed");
+  const petSterilizedSearch = document.getElementById("input-sterilized");
   const data = {
-    petIdSearch: petIdSearch,
-    petTypeSearch: petTypeSearch,
-    petNameSearch: petNameSearch,
-    petBreedSearch: petBreedSearch,
+    petIdSearch: petIdSearch.value.toLowerCase(),
+    petTypeSearch: petTypeSearch.value.toLowerCase(),
+    petNameSearch: petNameSearch.value.toLowerCase(),
+    petBreedSearch: petBreedSearch.value.toLowerCase(),
+    petVacSearch: petVacSearch.checked,
+    petDewormedSearch: petDewormedSearch.checked,
+    petSterilizedSearch: petSterilizedSearch.checked,
   };
   return data;
 };
 
 const searchById = function (searchData) {
+  console.log(searchData.petIdSearch);
+  console.log(getFormElements());
+
   if (!searchData.petIdSearch) {
+    console.log(petArr);
     return petArr;
   }
+
   return petArr.filter(function (pet) {
-    return pet.id.includes(searchData.petIdSearch);
+    return pet.id.toLowerCase().includes(searchData.petIdSearch);
   });
 };
 
@@ -36,28 +47,62 @@ const searchByName = function (searchData) {
     return searchById(searchData);
   }
   return searchById(searchData).filter(function (pet) {
-    return pet.dataName.includes(searchData.petNameSearch);
+    return pet.dataName.toLowerCase().includes(searchData.petNameSearch);
   });
 };
 
 const searchByType = function (searchData) {
+  if (searchData.petTypeSearch === "select type") {
+    return searchByName(searchData);
+  }
   return searchByName(searchData).filter(function (pet) {
-    return pet.type.includes(searchData.petTypeSearch);
+    return pet.type.toLowerCase().includes(searchData.petTypeSearch);
   });
 };
 
 const searchByBreed = function (searchData) {
+  if (searchData.petBreedSearch === "select breed") {
+    return searchByType(searchData);
+  }
   return searchByType(searchData).filter(function (pet) {
-    return pet.breed.includes(searchData.petBreedSearch);
+    return pet.breed.toLowerCase().includes(searchData.petBreedSearch);
   });
 };
 
-const searchResult = searchByBreed;
+const searchByVac = function (searchData) {
+  if (!searchData.petVacSearch) {
+    return searchByBreed(searchData);
+  }
+  return searchByBreed(searchData).filter(function (pet) {
+    return pet.vaccinated === searchData.petVacSearch;
+  });
+};
+
+const searchByDewomred = function (searchData) {
+  if (!searchData.petDewormedSearch) {
+    return searchByVac(searchData);
+  }
+  return searchByVac(searchData).filter(function (pet) {
+    return pet.dewormed === searchData.petDewormedSearch;
+  });
+};
+
+const searchBySterilized = function (searchData) {
+  if (!searchData.petSterilizedSearch) {
+    return searchByDewomred(searchData);
+  }
+  return searchByDewomred(searchData).filter(function (pet) {
+    return pet.sterilized === searchData.petSterilizedSearch;
+  });
+};
+
+const searchResult = searchBySterilized;
+
 btnFind.addEventListener("click", function () {
   // Take search keywords from the form
   const searchData = getFormElements();
   const filteredPetArr = searchResult(searchData);
-  console.log(filteredPetArr);
+
   /*  Display every element in the petArr  */
   function renderTableData(petArr) {
     const tableBodyEl = document.getElementById("tbody");
@@ -92,13 +137,7 @@ btnFind.addEventListener("click", function () {
               }</td>
 							<td>${new Date(petArr[i].date).toISOString().split("T")[0]}</td>
                             
-							<td><button type="button" class="btn btn-warning btn-edit" data-petId="${
-                petArr[i].id
-              }">Edit</button> 
-
-							</td>`;
-      //   This button should contain only one class with the first 4 letters of "id--" because this class is used to store the id of the pet.
-      // If another class with the first 4 letter of "id--" appear, there is a good chance the program will delete the wrong row because it takes the wrong id.
+							`;
       tableBodyEl.appendChild(row);
     }
   }
